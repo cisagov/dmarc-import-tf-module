@@ -24,3 +24,8 @@ module "ses" {
   temporary_bucket_name = "${var.temporary_bucket_name}"
   emails = "${var.emails}"
 }
+
+# Configure Elasticsearch
+module "elasticsearch-service" {
+  source = "./modules/elasticsearch-service"
+}
