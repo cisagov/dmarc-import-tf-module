@@ -1,24 +1,33 @@
-resource "aws_ses_receipt_rule_set" "rules" {
-  rule_set_name = "dmarc-import"
+# Stash the name of our rule set, so it is defined in only one place
+locals {
+  rule_set_name = "dmarc-import-rules"
 }
 
+# Make a new rule set for handling the DMARC aggregate report emails
+# that arrive
+resource "aws_ses_receipt_rule_set" "rules" {
+  rule_set_name = "${local.rule_set_name}"
+}
+
+# Make a rule for handling the DMARC aggregate report emails that
+# arrive
 resource "aws_ses_receipt_rule" "rule" {
-  name = "dmarc-emails"
-  rule_set_name = "dmarc-import"
-  recipients = [
-    "reports@dmarc.cyber.dhs.gov",
-    "reports@dmarc.cyber.secure-fed.org"
-  ]
+  name = "receive-dmarc-emails"
+  rule_set_name = "${local.rule_set_name}"
+  recipients = "${var.emails}"
+
   enabled = true
   scan_enabled = true
 
+  # Save to the permanent S3 bucket
   s3_action {
-    bucket_name = "cyhy-dmarc-report-emails"
+    bucket_name = "${var.permanent_bucket_name}"
     position = 0
   }
 
+  # Save to the temporary S3 bucket
   s3_action {
-    bucket_name = "dmarc-import"
+    bucket_name = "${var.temporary_bucket_name}"
     position = 1
   }
 
@@ -27,4 +36,9 @@ resource "aws_ses_receipt_rule" "rule" {
   #   invocation_type = "Event"
   #   position = 2
   # }
+}
+
+# Make this rule set the active one
+resource "aws_ses_active_receipt_rule_set" "active" {
+  rule_set_name = "${local.rule_set_name}"
 }

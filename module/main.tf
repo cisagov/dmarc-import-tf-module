@@ -16,3 +16,11 @@ module "iam" {
   permanent_bucket_name = "${var.permanent_bucket_name}"
   temporary_bucket_name = "${var.temporary_bucket_name}"
 }
+
+# Configure the SES rules
+module "ses" {
+  source = "./modules/ses"
+  permanent_bucket_name = "${var.permanent_bucket_name}"
+  temporary_bucket_name = "${var.temporary_bucket_name}"
+  emails = "${var.emails}"
+}
