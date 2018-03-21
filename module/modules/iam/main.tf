@@ -1,60 +1,96 @@
-provider "aws" {
-  region = "us-east-1"
+# IAM assume role policy document for the role we're creating
+data "aws_iam_policy_document" "assume_role_doc" {
+  statement {
+    effect = "Allow"
+
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
 }
 
-resource "aws_iam_user" "user" {
-  name = "dmarc-importer-user"
+# The role we're creating
+resource "aws_iam_role" "role" {
+  name = "dmarc-importer-role"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role_doc.json}"
 }
 
-resource "aws_iam_access_key" "access_key" {
-  user = "${aws_iam_user.user.name}"
+# IAM policy document that that allows some S3 permissions on our
+# dmarc-import buckets.  This will be applied to the role we are
+# creating.
+data "aws_iam_policy_document" "s3_doc" {
+  statement {
+    effect = "Allow"
+    
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:GetObjectTorrent"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.permanent_bucket_name}",
+      "arn:aws:s3:::${var.permanent_bucket_name}/*",
+      "arn:aws:s3:::${var.temporary_bucket_name}",
+      "arn:aws:s3:::${var.temporary_bucket_name}/*"
+    ]
+  }
+
+  # Elasticsearch permissions
+  statement {
+    effect = "Allow"
+    
+    actions = ["es:*"]
+
+    resources = ["*"]
+  }
 }
 
-resource "aws_iam_user_policy" "s3_read" {
+# IAM policy document that that allows all Elasticsearch permissions.
+# This will be applied to the role we are creating.
+data "aws_iam_policy_document" "es_doc" {
+  statement {
+    effect = "Allow"
+    
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:GetObjectTorrent"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.permanent_bucket_name}",
+      "arn:aws:s3:::${var.permanent_bucket_name}/*",
+      "arn:aws:s3:::${var.temporary_bucket_name}",
+      "arn:aws:s3:::${var.temporary_bucket_name}/*"
+    ]
+  }
+
+  # Elasticsearch permissions
+  statement {
+    effect = "Allow"
+    
+    actions = ["es:*"]
+
+    resources = ["*"]
+  }
+}
+
+# The S3 policy for our role
+resource "aws_iam_role_policy" "s3_policy" {
   name = "dmarc-import-s3-read"
-  user = "${aws_iam_user.user.name}"
+  role = "${aws_iam_role.role.id}"
 
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListBucket",
-                "s3:GetObject",
-                "s3:GetObjectTorrent"
-            ],
-            "Resource": [
-                "arn:aws:s3:::cyhy-dmarc-report-emails",
-                "arn:aws:s3:::cyhy-dmarc-report-emails/*",
-                "arn:aws:s3:::dmarc-import",
-                "arn:aws:s3:::dmarc-import/*"
-            ]
-        }
-    ]
-}
-EOF
+  policy = "${data.aws_iam_policy_document.s3_doc.json}"
 }
 
-resource "aws_iam_user_policy" "es_full" {
-  name = "dmarc-import-es-full-access"
-  user = "${aws_iam_user.user.name}"
+# The Elasticsearch policy for our role
+resource "aws_iam_role_policy" "es_policy" {
+  name = "dmarc-import-es-full"
+  role = "${aws_iam_role.role.id}"
 
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "es:*"
-            ],
-            "Resource": [
-                "*"
-            ]
-        }
-    ]
-}
-EOF
+  policy = "${data.aws_iam_policy_document.es_doc.json}"
 }
