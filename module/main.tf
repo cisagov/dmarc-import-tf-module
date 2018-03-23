@@ -12,7 +12,6 @@ module "s3" {
 # Configure the IAM role
 module "iam" {
   source = "./modules/iam"
-  permanent_bucket_name = "${module.s3.permanent_bucket_name}"
   temporary_bucket_name = "${module.s3.temporary_bucket_name}"
 }
 

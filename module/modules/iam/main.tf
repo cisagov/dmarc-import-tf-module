@@ -18,26 +18,10 @@ resource "aws_iam_role" "role" {
 }
 
 # IAM policy document that that allows some S3 permissions on our
-# dmarc-import buckets.  This will be applied to the role we are
-# creating.
+# temporary dmarc-import bucket.  This will be applied to the role we
+# are creating.
 data "aws_iam_policy_document" "s3_doc" {
-  # The permanent bucket
   statement {
-    effect = "Allow"
-    
-    actions = [
-      "s3:ListBucket",
-      "s3:GetObject"
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.permanent_bucket_name}",
-      "arn:aws:s3:::${var.permanent_bucket_name}/*",
-    ]
-  }
-
-  statement {
-    # The temporary bucket
     effect = "Allow"
     
     actions = [
