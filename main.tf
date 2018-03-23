@@ -1,7 +1,7 @@
 module "dmarc-import" {
   source = "./module"
-  
-  permanent_bucket_name = "${var.permanent_bucket_name}"
-  temporary_bucket_name = "${var.temporary_bucket_name}"
+
+  aws_region = "${var.aws_region}"
+  bucket_prefix = "${var.bucket_prefix}"
   emails = "${var.emails}"
 }

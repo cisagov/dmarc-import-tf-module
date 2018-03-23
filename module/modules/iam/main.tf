@@ -14,7 +14,6 @@ data "aws_iam_policy_document" "assume_role_doc" {
 
 # The role we're creating
 resource "aws_iam_role" "role" {
-  name = "dmarc-importer-role"
   assume_role_policy = "${data.aws_iam_policy_document.assume_role_doc.json}"
 }
 
@@ -22,30 +21,35 @@ resource "aws_iam_role" "role" {
 # dmarc-import buckets.  This will be applied to the role we are
 # creating.
 data "aws_iam_policy_document" "s3_doc" {
+  # The permanent bucket
   statement {
     effect = "Allow"
     
     actions = [
       "s3:ListBucket",
-      "s3:GetObject",
-      "s3:GetObjectTorrent"
+      "s3:GetObject"
     ]
 
     resources = [
       "arn:aws:s3:::${var.permanent_bucket_name}",
       "arn:aws:s3:::${var.permanent_bucket_name}/*",
-      "arn:aws:s3:::${var.temporary_bucket_name}",
-      "arn:aws:s3:::${var.temporary_bucket_name}/*"
     ]
   }
 
-  # Elasticsearch permissions
   statement {
+    # The temporary bucket
     effect = "Allow"
     
-    actions = ["es:*"]
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:DeleteObject"
+    ]
 
-    resources = ["*"]
+    resources = [
+      "arn:aws:s3:::${var.temporary_bucket_name}",
+      "arn:aws:s3:::${var.temporary_bucket_name}/*"
+    ]
   }
 }
 
@@ -54,43 +58,19 @@ data "aws_iam_policy_document" "s3_doc" {
 data "aws_iam_policy_document" "es_doc" {
   statement {
     effect = "Allow"
-    
-    actions = [
-      "s3:ListBucket",
-      "s3:GetObject",
-      "s3:GetObjectTorrent"
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.permanent_bucket_name}",
-      "arn:aws:s3:::${var.permanent_bucket_name}/*",
-      "arn:aws:s3:::${var.temporary_bucket_name}",
-      "arn:aws:s3:::${var.temporary_bucket_name}/*"
-    ]
-  }
-
-  # Elasticsearch permissions
-  statement {
-    effect = "Allow"
-    
     actions = ["es:*"]
-
     resources = ["*"]
   }
 }
 
 # The S3 policy for our role
 resource "aws_iam_role_policy" "s3_policy" {
-  name = "dmarc-import-s3-read"
   role = "${aws_iam_role.role.id}"
-
   policy = "${data.aws_iam_policy_document.s3_doc.json}"
 }
 
 # The Elasticsearch policy for our role
 resource "aws_iam_role_policy" "es_policy" {
-  name = "dmarc-import-es-full"
   role = "${aws_iam_role.role.id}"
-
   policy = "${data.aws_iam_policy_document.es_doc.json}"
 }
