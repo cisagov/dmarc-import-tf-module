@@ -30,12 +30,6 @@ resource "aws_ses_receipt_rule" "rule" {
     bucket_name = "${var.temporary_bucket_name}"
     position = 1
   }
-
-  # lambda_action {
-  #   function_arn = ??
-  #   invocation_type = "Event"
-  #   position = 2
-  # }
 }
 
 # Make this rule set the active one
