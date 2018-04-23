@@ -5,5 +5,6 @@ before_install:
   - rm -f terraform.zip
 
 script:
+  - terraform init
   - terraform validate -var-file=staging.tfvars
   - terraform validate -var-file=production.tfvars
