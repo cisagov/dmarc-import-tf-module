@@ -2,4 +2,19 @@
 resource "aws_elasticsearch_domain" "es" {
   domain_name = "dmarc-import-elasticsearch"
   elasticsearch_version = "6.2"
+
+  cluster_config = {
+    instance_type = "m4.large.elasticsearch"
+    instance_count = 2
+  }
+
+  ebs_options = {
+    ebs_enabled = true
+    volume_type = "standard"
+    volume_size = 100
+  }
+
+  encrypt_at_rest = {
+    enabled = true
+  }
 }
