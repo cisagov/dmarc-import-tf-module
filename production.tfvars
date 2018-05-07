@@ -1,6 +1,8 @@
 aws_region = "us-east-1"
 
-bucket_prefix = "dmarc-import"
+permanent_bucket_name = "dmarc-import-permanent"
+
+temporary_bucket_name = "dmarc-import-temporary"
 
 emails = [
   "reports@dmarc.cyber.dhs.gov",

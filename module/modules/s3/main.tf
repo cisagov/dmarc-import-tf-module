@@ -1,7 +1,7 @@
 # This is the S3 bucket where the DMARC aggregate report emails are
 # stored *permanently*
 resource "aws_s3_bucket" "permanent" {
-  bucket_prefix = "${var.bucket_prefix}"
+  bucket = "${var.permanent_bucket_name}"
 
   server_side_encryption_configuration {
     rule {
@@ -15,7 +15,7 @@ resource "aws_s3_bucket" "permanent" {
 # This is the S3 bucket where the DMARC aggregate report emails are
 # stored "temporarily" until they have been processed
 resource "aws_s3_bucket" "temporary" {
-  bucket = "${var.bucket_prefix}"
+  bucket = "${var.temporary_bucket_name}"
 
   server_side_encryption_configuration {
     rule {

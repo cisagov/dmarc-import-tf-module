@@ -3,9 +3,14 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
-variable "bucket_prefix" {
+variable "permanent_bucket_name" {
   type = "string"
-  description = "A prefix to use for the names of the S3 buckets where the DMARC aggregate report emails are stored"
+  description = "The name of the S3 bucket where the DMARC aggregate report emails are stored permanently"
+}
+
+variable "temporary_bucket_name" {
+  type = "string"
+  description = "The name of the S3 bucket where the DMARC aggregate report emails are stored temporarily (until processed)"
 }
 
 variable "emails" {
