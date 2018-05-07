@@ -26,6 +26,60 @@ resource "aws_s3_bucket" "temporary" {
   }
 }
 
+# IAM policy document that that allows SES to write to our permanent
+# dmarc-import bucket.
+data "aws_iam_policy_document" "ses_permanent_s3_doc" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type = "Service"
+      identifiers = ["ses.amazonaws.com"]
+    }
+    
+    actions = [
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.permanent_bucket_name}/*"
+    ]
+  }
+}
+
+# This is the policy for our permanent S3 bucket
+resource "aws_s3_bucket_policy" "permanent_policy" {
+  bucket = "${aws_s3_bucket.permanent.id}"
+  policy = "${data.aws_iam_policy_document.ses_permanent_s3_doc.json}"
+}
+
+# IAM policy document that that allows SES to write to our temporary
+# dmarc-import bucket.
+data "aws_iam_policy_document" "ses_temporary_s3_doc" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type = "Service"
+      identifiers = ["ses.amazonaws.com"]
+    }
+    
+    actions = [
+      "s3:PutObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.temporary_bucket_name}/*"
+    ]
+  }
+}
+
+# This is the policy for our temporary S3 bucket
+resource "aws_s3_bucket_policy" "temporary_policy" {
+  bucket = "${aws_s3_bucket.temporary.id}"
+  policy = "${data.aws_iam_policy_document.ses_temporary_s3_doc.json}"
+}
+
 # S3 bucket notification that sends an event to the SQS queue when an
 # object is created in the temporary bucket
 resource "aws_s3_bucket_notification" "notification" {
