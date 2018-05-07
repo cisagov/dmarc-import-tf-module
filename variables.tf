@@ -3,6 +3,11 @@ variable "aws_region" {
   default = "us-east-1"
 }
 
+variable "queue_name" {
+  type = "string"
+  description = "The name of the SQS queue where events will be sent as DMARC aggregate reports are received"
+}
+
 variable "permanent_bucket_name" {
   type = "string"
   description = "The name of the S3 bucket where the DMARC aggregate report emails are stored permanently"
