@@ -47,6 +47,26 @@ data "aws_iam_policy_document" "es_doc" {
   }
 }
 
+# IAM policy document that that allows some SQS permissions on our
+# dmarc-import queue.  This will be applied to the role we are
+# creating.
+data "aws_iam_policy_document" "sqs_doc" {
+  statement {
+    effect = "Allow"
+    
+    actions = [
+      "sqs:GetQueueAttributes",
+      "sqs:GetQueueUrl",
+      "sqs:ReceiveMessage",
+      "sqs:DeleteMessage",
+    ]
+
+    resources = [
+      "${var.queue_arn}"
+    ]
+  }
+}
+
 # The S3 policy for our role
 resource "aws_iam_role_policy" "s3_policy" {
   role = "${aws_iam_role.role.id}"
@@ -57,4 +77,10 @@ resource "aws_iam_role_policy" "s3_policy" {
 resource "aws_iam_role_policy" "es_policy" {
   role = "${aws_iam_role.role.id}"
   policy = "${data.aws_iam_policy_document.es_doc.json}"
+}
+
+# The SQS policy for our role
+resource "aws_iam_role_policy" "sqs_policy" {
+  role = "${aws_iam_role.role.id}"
+  policy = "${data.aws_iam_policy_document.sqs_doc.json}"
 }

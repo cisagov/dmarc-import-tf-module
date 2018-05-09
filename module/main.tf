@@ -21,6 +21,7 @@ module "s3" {
 module "iam" {
   source = "./modules/iam"
   temporary_bucket_name = "${var.temporary_bucket_name}"
+  queue_arn = "${module.sqs.queue_arn}"
 }
 
 # Configure the SES rules
