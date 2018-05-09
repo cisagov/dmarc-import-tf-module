@@ -37,3 +37,11 @@ module "ses" {
 module "elasticsearch-service" {
   source = "./modules/elasticsearch-service"
 }
+
+# Configure the Lambda function
+module "lambda" {
+  source = "./modules/lambda"
+  name = "${var.lambda_function_name}"
+  zip_file = "${var.lambda_function_zip_file}"
+  role_arn = "${module.iam.role_arn}"
+}

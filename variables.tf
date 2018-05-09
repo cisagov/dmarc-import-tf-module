@@ -22,3 +22,13 @@ variable "emails" {
   type = "list"
   description = "A list of the email addresses at which DMARC aggregate reports are being received"
 }
+
+variable "lambda_function_name" {
+  type = "string"
+  description = "The name to use for the Lambda function"
+}
+
+variable "lambda_function_zip_file" {
+  type = "string"
+  description = "The location of the zip file for the Lambda function"
+}

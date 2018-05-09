@@ -6,4 +6,6 @@ module "dmarc-import" {
   permanent_bucket_name = "${var.permanent_bucket_name}"
   temporary_bucket_name = "${var.temporary_bucket_name}"
   emails = "${var.emails}"
+  lambda_function_name = "${var.lambda_function_name}"
+  lambda_function_zip_file = "${var.lambda_function_zip_file}"
 }

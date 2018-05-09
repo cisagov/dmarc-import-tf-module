@@ -10,3 +10,7 @@ emails = [
   "reports@dmarc.cyber.dhs.gov",
   "reports@dmarc.cyber.secure-fed.org"
 ]
+
+lambda_function_name = "dmarc-import"
+
+lambda_function_zip_file = "../dmarc-import-lambda/dmarc-import.zip"
