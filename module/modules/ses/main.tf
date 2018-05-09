@@ -22,13 +22,13 @@ resource "aws_ses_receipt_rule" "rule" {
   # Save to the permanent S3 bucket
   s3_action {
     bucket_name = "${var.permanent_bucket_name}"
-    position = 0
+    position = 1
   }
 
   # Save to the temporary S3 bucket
   s3_action {
     bucket_name = "${var.temporary_bucket_name}"
-    position = 1
+    position = 2
   }
 }
 
