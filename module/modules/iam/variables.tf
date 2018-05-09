@@ -7,3 +7,8 @@ variable "queue_arn" {
   type = "string"
   description = "The ARN of the SQS queue where events will be sent as DMARC aggregate reports are received"
 }
+
+variable "elasticsearch_arn" {
+  type = "string"
+  description = "The ARN of the Elasticsearch instance"
+}
