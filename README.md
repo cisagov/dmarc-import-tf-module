@@ -13,10 +13,23 @@ DMARC aggregate reports.
 
 ```bash
 terraform init
-terraform validate -var-file=production.tfvars
-terraform plan -var-file=production.tfvars
 terraform apply -var-file=production.tfvars
 ```
+
+The `apply` command forces you to type `yes` at a prompt before
+actually deploying any infrastructure, so it is quite safe to use.  If
+you want an extra layer of safety you can opt to use this command when
+you just want to validate your Terraform syntax:
+```bash
+terraform validate -var-file=production.tfvars
+```
+
+If you want to see what Terraform *would* deploy if you ran the
+`apply` command, you can use this command:
+```bash
+terraform plan -var-file=production.tfvars
+```
+
 ## License ##
 
 This project is in the worldwide [public domain](LICENSE.md).
