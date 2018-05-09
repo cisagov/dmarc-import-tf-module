@@ -5,7 +5,7 @@ resource "aws_elasticsearch_domain" "es" {
 
   cluster_config = {
     instance_type = "m4.large.elasticsearch"
-    instance_count = 2
+    instance_count = 1
   }
 
   ebs_options = {
