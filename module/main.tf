@@ -22,6 +22,7 @@ module "iam" {
   source = "./modules/iam"
   temporary_bucket_name = "${var.temporary_bucket_name}"
   queue_arn = "${module.sqs.queue_arn}"
+  elasticsearch_arn = "${module.elasticsearch-service.elasticsearch_arn}"
 }
 
 # Configure the SES rules
