@@ -1,13 +1,12 @@
-# This is the name of the SQS queue where events will be sent as DMARC
-# aggregate reports are received
+# This is the SQS queue where events will be sent as DMARC aggregate
+# reports are received
 resource "aws_sqs_queue" "queue" {
   name = "${var.queue_name}"
   message_retention_seconds = 1209600
   receive_wait_time_seconds = 20
 }
 
-# IAM policy document that that allows SES to write to our permanent
-# dmarc-import bucket.
+# IAM policy document that that allows S3 to write to the queue
 data "aws_iam_policy_document" "s3_sqs_doc" {
   statement {
     effect = "Allow"
