@@ -36,6 +36,7 @@ module "ses" {
 # Configure Elasticsearch
 module "elasticsearch-service" {
   source = "./modules/elasticsearch-service"
+  domain_name = "${var.elasticsearch_domain_name}"
 }
 
 # Configure the Lambda function

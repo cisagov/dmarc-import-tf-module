@@ -1,6 +1,6 @@
 # The Elasticsearch domain
 resource "aws_elasticsearch_domain" "es" {
-  domain_name = "dmarc-import-elasticsearch"
+  domain_name = "${var.domain_name}"
   elasticsearch_version = "6.2"
 
   cluster_config = {
