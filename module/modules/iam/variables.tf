@@ -12,3 +12,8 @@ variable "elasticsearch_arn" {
   type = "string"
   description = "The ARN of the Elasticsearch instance"
 }
+
+variable "lambda_function_name" {
+  type = "string"
+  description = "The name of the Lambda function that processes DMARC aggregate report emails"
+}
