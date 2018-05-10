@@ -25,13 +25,11 @@ data "aws_iam_policy_document" "s3_doc" {
     effect = "Allow"
     
     actions = [
-      "s3:ListBucket",
       "s3:GetObject",
       "s3:DeleteObject"
     ]
 
     resources = [
-      "arn:aws:s3:::${var.temporary_bucket_name}",
       "arn:aws:s3:::${var.temporary_bucket_name}/*"
     ]
   }
@@ -42,7 +40,6 @@ resource "aws_iam_role_policy" "s3_policy" {
   role = "${aws_iam_role.role.id}"
   policy = "${data.aws_iam_policy_document.s3_doc.json}"
 }
-
 
 # IAM policy document that that allows all Elasticsearch permissions.
 # This will be applied to the role we are creating.
@@ -78,8 +75,6 @@ data "aws_iam_policy_document" "sqs_doc" {
     effect = "Allow"
     
     actions = [
-      "sqs:GetQueueAttributes",
-      "sqs:GetQueueUrl",
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
     ]
