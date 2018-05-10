@@ -11,7 +11,7 @@ DMARC aggregate reports.
 
 Here is a [Cloudcraft.co](https://cloudcraft.co) diagram of the basic
 infrastructure created by these Terraform files:
-![diagram](dmarc_import.png)
+![diagram](dmarc_import.svg)
 
 ## Installation of the Terraform infrastructure ##
 
