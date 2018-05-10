@@ -6,4 +6,4 @@ before_install:
 
 script:
   - terraform init
-  - terraform validate -var-file=production.tfvars
+  - terraform validate -var-file=travis.tfvars
