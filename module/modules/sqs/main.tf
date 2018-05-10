@@ -5,6 +5,16 @@ resource "aws_sqs_queue" "queue" {
   message_retention_seconds = 1209600
   receive_wait_time_seconds = 20
 
+  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.dead_letter_queue.arn}\",\"maxReceiveCount\":20}"
+
+  tags = "${var.tags}"
+}
+
+# This is the dead-letter queue for the previous SQS queue
+resource "aws_sqs_queue" "dead_letter_queue" {
+  name = "${var.queue_name}_dead_letter"
+  message_retention_seconds = 1209600
+
   tags = "${var.tags}"
 }
 
