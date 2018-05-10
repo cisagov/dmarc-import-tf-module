@@ -32,3 +32,8 @@ variable "lambda_function_zip_file" {
   type = "string"
   description = "The location of the zip file for the Lambda function"
 }
+
+variable "elasticsearch_index" {
+  type = "string"
+  description = "The Elasticsearch index to which to write DMARC aggregate report data"
+}

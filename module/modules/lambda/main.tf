@@ -1,5 +1,10 @@
+# We need the AWS region in order to pass it to the Lambda function
+data "aws_region" "current" {}
+
+# The AWS Lambda function that processes DMARC aggregate report emails
 resource "aws_lambda_function" "lambda" {
   filename = "${var.zip_file}"
+  source_code_hash = "${base64sha256(file("${var.zip_file}"))}"
   function_name = "${var.name}"
   role = "${var.role_arn}"
   handler = "lambda_handler.handler"
@@ -7,6 +12,14 @@ resource "aws_lambda_function" "lambda" {
   timeout = 300
   memory_size = 128
   description = "Lambda function for processing DMARC aggregate report emails"
+
+  environment {
+    variables = {
+      queue_url = "${var.queue_url}"
+      elasticsearch_url = "https://${var.elasticsearch_endpoint}/${var.elasticsearch_index}"
+      elasticsearch_region = "${data.aws_region.current.name}"
+    }
+  }
 }
 
 # Allows CloudWatch to invoke this Lambda function

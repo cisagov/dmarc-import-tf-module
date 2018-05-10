@@ -44,4 +44,7 @@ module "lambda" {
   name = "${var.lambda_function_name}"
   zip_file = "${var.lambda_function_zip_file}"
   role_arn = "${module.iam.role_arn}"
+  queue_url = "${module.sqs.queue_url}"
+  elasticsearch_endpoint = "${module.elasticsearch-service.elasticsearch_endpoint}"
+  elasticsearch_index = "${var.elasticsearch_index}"
 }

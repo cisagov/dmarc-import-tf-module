@@ -18,3 +18,4 @@ resource "aws_elasticsearch_domain" "es" {
     enabled = true
   }
 }
+

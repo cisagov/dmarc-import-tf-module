@@ -8,4 +8,5 @@ module "dmarc-import" {
   emails = "${var.emails}"
   lambda_function_name = "${var.lambda_function_name}"
   lambda_function_zip_file = "${var.lambda_function_zip_file}"
+  elasticsearch_index = "${var.elasticsearch_index}"
 }
