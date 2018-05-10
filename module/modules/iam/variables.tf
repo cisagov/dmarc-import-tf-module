@@ -17,3 +17,9 @@ variable "lambda_function_name" {
   type = "string"
   description = "The name of the Lambda function that processes DMARC aggregate report emails"
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+  description = "Tags to apply to all AWS resources created"
+}

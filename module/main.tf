@@ -7,6 +7,7 @@ provider "aws" {
 module "sqs" {
   source = "./modules/sqs"
   queue_name = "${var.queue_name}"
+  tags = "${var.tags}"
 }
 
 # Configure the S3 buckets
@@ -15,6 +16,7 @@ module "s3" {
   permanent_bucket_name = "${var.permanent_bucket_name}"
   temporary_bucket_name = "${var.temporary_bucket_name}"
   queue_arn = "${module.sqs.queue_arn}"
+  tags = "${var.tags}"
 }
 
 # Configure the IAM role
@@ -24,6 +26,7 @@ module "iam" {
   queue_arn = "${module.sqs.queue_arn}"
   elasticsearch_arn = "${module.elasticsearch-service.elasticsearch_arn}"
   lambda_function_name = "${var.lambda_function_name}"
+  tags = "${var.tags}"
 }
 
 # Configure the SES rules
@@ -32,12 +35,14 @@ module "ses" {
   permanent_bucket_name = "${var.permanent_bucket_name}"
   temporary_bucket_name = "${var.temporary_bucket_name}"
   emails = "${var.emails}"
+  tags = "${var.tags}"
 }
 
 # Configure Elasticsearch
 module "elasticsearch-service" {
   source = "./modules/elasticsearch-service"
   domain_name = "${var.elasticsearch_domain_name}"
+  tags = "${var.tags}"
 }
 
 # Configure the Lambda function
@@ -49,4 +54,5 @@ module "lambda" {
   queue_url = "${module.sqs.queue_url}"
   elasticsearch_endpoint = "${module.elasticsearch-service.elasticsearch_endpoint}"
   elasticsearch_index = "${var.elasticsearch_index}"
+  tags = "${var.tags}"
 }

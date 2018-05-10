@@ -12,3 +12,9 @@ variable "queue_arn" {
   type = "string"
   description = "The ARN of the SQS queue where events will be sent as DMARC aggregate reports are received"
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+  description = "Tags to apply to all AWS resources created"
+}

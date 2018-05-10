@@ -20,6 +20,8 @@ resource "aws_lambda_function" "lambda" {
       elasticsearch_region = "${data.aws_region.current.name}"
     }
   }
+
+  tags = "${var.tags}"
 }
 
 # Allows CloudWatch to invoke this Lambda function

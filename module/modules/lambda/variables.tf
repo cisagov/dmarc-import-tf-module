@@ -27,3 +27,9 @@ variable "elasticsearch_index" {
   type = "string"
   description = "The Elasticsearch index to which to write DMARC aggregate report data"
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+  description = "Tags to apply to all AWS resources created"
+}

@@ -12,3 +12,9 @@ variable "emails" {
   type = "list"
   description = "A list of the email addresses at which DMARC aggregate reports are being received"
 }
+
+variable "tags" {
+  type = "map"
+  default = {}
+  description = "Tags to apply to all AWS resources created"
+}

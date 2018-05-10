@@ -4,6 +4,8 @@ resource "aws_sqs_queue" "queue" {
   name = "${var.queue_name}"
   message_retention_seconds = 1209600
   receive_wait_time_seconds = 20
+
+  tags = "${var.tags}"
 }
 
 # IAM policy document that that allows S3 to write to the queue

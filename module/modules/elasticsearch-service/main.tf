@@ -17,5 +17,7 @@ resource "aws_elasticsearch_domain" "es" {
   encrypt_at_rest = {
     enabled = true
   }
+
+  tags = "${var.tags}"
 }
 

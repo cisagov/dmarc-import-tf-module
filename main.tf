@@ -10,4 +10,5 @@ module "dmarc-import" {
   lambda_function_zip_file = "${var.lambda_function_zip_file}"
   elasticsearch_index = "${var.elasticsearch_index}"
   elasticsearch_domain_name = "${var.elasticsearch_domain_name}"
+  tags = "${var.tags}"
 }
