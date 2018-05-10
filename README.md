@@ -9,6 +9,10 @@ reports.  This repository goes along with
 contains the actual source code for ingesting, parsing, and saving the
 DMARC aggregate reports.
 
+Here is a [Cloudcraft.co](https://cloudcraft.co) diagram of the basic
+infrastructure created by these Terraform files:
+[![diagram](dmarc_import.png)]
+
 ## Installation of the Terraform infrastructure ##
 
 ```bash
