@@ -22,7 +22,7 @@ module "s3" {
 # Configure the IAM role
 module "iam" {
   source = "./modules/iam"
-  temporary_bucket_name = "${var.temporary_bucket_name}"
+  temporary_bucket_arn = "${module.s3.temporary_bucket_arn}"
   queue_arn = "${module.sqs.queue_arn}"
   elasticsearch_arn = "${module.elasticsearch-service.elasticsearch_arn}"
   lambda_function_name = "${var.lambda_function_name}"

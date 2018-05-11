@@ -1,6 +1,6 @@
-variable "temporary_bucket_name" {
+variable "temporary_bucket_arn" {
   type = "string"
-  description = "The name to use for the the S3 bucket where the DMARC aggregate report emails are stored temporarily until they have been imported into the database"
+  description = "The ARN of the S3 bucket where the DMARC aggregate report emails are stored temporarily until they have been imported into the database"
 }
 
 variable "queue_arn" {

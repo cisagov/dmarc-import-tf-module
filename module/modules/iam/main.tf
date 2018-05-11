@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "s3_doc" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.temporary_bucket_name}/*"
+      "${var.temporary_bucket_arn}/*"
     ]
   }
 }
