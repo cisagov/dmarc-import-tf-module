@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "permanent" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -18,17 +18,20 @@ resource "aws_s3_bucket" "permanent" {
 # stored "temporarily" until they have been processed
 resource "aws_s3_bucket" "temporary" {
   bucket = "${var.temporary_bucket_name}"
-
+  
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
 
   tags = "${var.tags}"
 }
+
+# We need the AWS account ID
+data "aws_caller_identity" "current" {}
 
 # IAM policy document that that allows SES to write to our permanent
 # dmarc-import bucket.
@@ -46,8 +49,16 @@ data "aws_iam_policy_document" "ses_permanent_s3_doc" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.permanent_bucket_name}/*"
+      "${aws_s3_bucket.permanent.arn}/*"
     ]
+
+    condition {
+      test = "StringEquals"
+      variable = "aws:Referer"
+      values = [
+        "${data.aws_caller_identity.current.account_id}"
+      ]
+    }
   }
 }
 
@@ -57,8 +68,8 @@ resource "aws_s3_bucket_policy" "permanent_policy" {
   policy = "${data.aws_iam_policy_document.ses_permanent_s3_doc.json}"
 }
 
-# IAM policy document that that allows SES to write to our temporary
-# dmarc-import bucket.
+# IAM policy document that that allows SES to write to our
+# temporary dmarc-import bucket.
 data "aws_iam_policy_document" "ses_temporary_s3_doc" {
   statement {
     effect = "Allow"
@@ -73,8 +84,16 @@ data "aws_iam_policy_document" "ses_temporary_s3_doc" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.temporary_bucket_name}/*"
+      "${aws_s3_bucket.temporary.arn}/*"
     ]
+
+    condition {
+      test = "StringEquals"
+      variable = "aws:Referer"
+      values = [
+        "${data.aws_caller_identity.current.account_id}"
+      ]
+    }
   }
 }
 
