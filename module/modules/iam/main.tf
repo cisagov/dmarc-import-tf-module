@@ -56,7 +56,8 @@ data "aws_iam_policy_document" "es_doc" {
     ]
     
     resources = [
-      "${var.elasticsearch_arn}"
+      "${var.elasticsearch_arn}",
+      "${var.elasticsearch_arn}/*"
     ]
   }
 }
