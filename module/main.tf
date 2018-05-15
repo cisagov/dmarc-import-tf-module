@@ -54,5 +54,6 @@ module "lambda" {
   queue_url = "${module.sqs.queue_url}"
   elasticsearch_endpoint = "${module.elasticsearch-service.elasticsearch_endpoint}"
   elasticsearch_index = "${var.elasticsearch_index}"
+  elasticsearch_type = "${var.elasticsearch_type}"
   tags = "${var.tags}"
 }

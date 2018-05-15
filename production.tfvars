@@ -17,6 +17,8 @@ lambda_function_zip_file = "../dmarc-import-lambda/dmarc-import.zip"
 
 elasticsearch_index = "dmarc_aggregate_reports"
 
+elasticsearch_type = "report"
+
 elasticsearch_domain_name = "dmarc-import-elasticsearch"
 
 tags = {

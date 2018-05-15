@@ -38,6 +38,11 @@ variable "elasticsearch_index" {
   description = "The Elasticsearch index to which to write DMARC aggregate report data"
 }
 
+variable "elasticsearch_type" {
+  type = "string"
+  description = "The Elasticsearch type corresponding to a DMARC aggregate report"
+}
+
 variable "elasticsearch_domain_name" {
   type = "string"
   description = "The domain name of the Elasticsearch instance"

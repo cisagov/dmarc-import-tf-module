@@ -16,7 +16,7 @@ resource "aws_lambda_function" "lambda" {
   environment {
     variables = {
       queue_url = "${var.queue_url}"
-      elasticsearch_url = "https://${var.elasticsearch_endpoint}/${var.elasticsearch_index}"
+      elasticsearch_url = "https://${var.elasticsearch_endpoint}/${var.elasticsearch_index}/${var.elasticsearch_type}"
       elasticsearch_region = "${data.aws_region.current.name}"
     }
   }
