@@ -36,8 +36,8 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
 resource "aws_cloudwatch_event_rule" "lambda" {
   name = "ImportDmarcAggregateReports"
   description = "Run the Lambda function for importing DMARC aggregate report emails"
-  schedule_expression = "rate(7 minutes)"
-  is_enabled = false
+  schedule_expression = "rate(5 minutes)"
+  is_enabled = true
 }
 
 # Target for the CloudWatch rule
