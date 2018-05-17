@@ -5,7 +5,7 @@ resource "aws_sqs_queue" "queue" {
   message_retention_seconds = 1209600
   receive_wait_time_seconds = 20
 
-  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.dead_letter_queue.arn}\",\"maxReceiveCount\":20}"
+  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.dead_letter_queue.arn}\",\"maxReceiveCount\":4}"
 
   tags = "${var.tags}"
 }
