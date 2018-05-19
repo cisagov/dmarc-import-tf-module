@@ -1,12 +1,9 @@
-# We need the AWS region in order to pass it to the Lambda function
-data "aws_region" "current" {}
-
 # The AWS Lambda function that processes DMARC aggregate report emails
 resource "aws_lambda_function" "lambda" {
-  filename = "${var.zip_file}"
-  source_code_hash = "${base64sha256(file("${var.zip_file}"))}"
-  function_name = "${var.name}"
-  role = "${var.role_arn}"
+  filename = "${var.lambda_function_zip_file}"
+  source_code_hash = "${base64sha256(file("${var.lambda_function_zip_file}"))}"
+  function_name = "${var.lambda_function_name}"
+  role = "${aws_iam_role.role.arn}"
   handler = "lambda_handler.handler"
   runtime = "python3.6"
   timeout = 300
@@ -15,9 +12,9 @@ resource "aws_lambda_function" "lambda" {
 
   environment {
     variables = {
-      queue_url = "${var.queue_url}"
-      elasticsearch_url = "https://${var.elasticsearch_endpoint}/${var.elasticsearch_index}/${var.elasticsearch_type}"
-      elasticsearch_region = "${data.aws_region.current.name}"
+      queue_url = "${aws_sqs_queue.queue.id}"
+      elasticsearch_url = "https://${aws_elasticsearch_domain.es.endpoint}/${var.elasticsearch_index}/${var.elasticsearch_type}"
+      elasticsearch_region = "${var.aws_region}"
     }
   }
 
@@ -48,7 +45,7 @@ resource "aws_cloudwatch_event_target" "lambda" {
 
 # The Cloudwatch log group for the Lambda function
 resource "aws_cloudwatch_log_group" "logs" {
-  name = "/aws/lambda/${var.name}"
+  name = "/aws/lambda/${aws_lambda_function.lambda.function_name}"
   retention_in_days = 90
 
   tags = "${var.tags}"
