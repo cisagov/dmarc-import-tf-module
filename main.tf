@@ -1,3 +1,8 @@
+# Configure AWS
+provider "aws" {
+  region = "${var.aws_region}"
+}
+
 module "dmarc-import" {
   source = "./module"
 

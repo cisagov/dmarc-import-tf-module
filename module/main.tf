@@ -1,8 +1,3 @@
-# Configure AWS
-provider "aws" {
-  region = "${var.aws_region}"
-}
-
 # Configure the SQS queue
 module "sqs" {
   source = "./modules/sqs"
