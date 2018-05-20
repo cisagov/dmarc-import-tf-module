@@ -1,6 +1,6 @@
 # The Elasticsearch domain
 resource "aws_elasticsearch_domain" "es" {
-  domain_name = "${var.domain_name}"
+  domain_name = "${var.elasticsearch_domain_name}"
   elasticsearch_version = "6.2"
 
   cluster_config = {
@@ -20,4 +20,3 @@ resource "aws_elasticsearch_domain" "es" {
 
   tags = "${var.tags}"
 }
-

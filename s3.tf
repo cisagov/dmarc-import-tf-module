@@ -30,9 +30,6 @@ resource "aws_s3_bucket" "temporary" {
   tags = "${var.tags}"
 }
 
-# We need the AWS account ID
-data "aws_caller_identity" "current" {}
-
 # IAM policy document that that allows SES to write to our permanent
 # dmarc-import bucket.
 data "aws_iam_policy_document" "ses_permanent_s3_doc" {
@@ -109,7 +106,7 @@ resource "aws_s3_bucket_notification" "notification" {
   bucket = "${aws_s3_bucket.temporary.id}"
 
   queue {
-    queue_arn = "${var.queue_arn}"
+    queue_arn = "${aws_sqs_queue.queue.arn}"
     events = ["s3:ObjectCreated:*"]
   }
 }

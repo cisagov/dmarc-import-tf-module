@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "s3_doc" {
     ]
 
     resources = [
-      "${var.temporary_bucket_arn}/*"
+      "${aws_s3_bucket.temporary.arn}/*"
     ]
   }
 }
@@ -56,8 +56,8 @@ data "aws_iam_policy_document" "es_doc" {
     ]
     
     resources = [
-      "${var.elasticsearch_arn}",
-      "${var.elasticsearch_arn}/*"
+      "${aws_elasticsearch_domain.es.arn}",
+      "${aws_elasticsearch_domain.es.arn}/*"
     ]
   }
 }
@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "sqs_doc" {
     ]
 
     resources = [
-      "${var.queue_arn}"
+      "${aws_sqs_queue.queue.arn}"
     ]
   }
 }
@@ -91,14 +91,6 @@ resource "aws_iam_role_policy" "sqs_policy" {
   role = "${aws_iam_role.role.id}"
   policy = "${data.aws_iam_policy_document.sqs_doc.json}"
 }
-
-# We need the AWS region in order to build the log and Lambda function
-# ARNs
-data "aws_region" "current" {}
-
-# We need the AWS account ID in order to build the log and Lambda
-# function ARNs
-data "aws_caller_identity" "current" {}
 
 # IAM policy document that that allows some Cloudwatch permissions for
 # our Lambda function.  This will allow the Lambda function to
@@ -115,8 +107,7 @@ data "aws_iam_policy_document" "cloudwatch_doc" {
     ]
 
     resources = [
-      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.lambda_function_name}",
-      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${var.lambda_function_name}:*"
+      "${aws_cloudwatch_log_group.logs.arn}",
     ]
   }
 }
@@ -138,7 +129,7 @@ data "aws_iam_policy_document" "lambda_doc" {
     ]
 
     resources = [
-      "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.lambda_function_name}"
+      "${aws_lambda_function.lambda.arn}"
     ]
   }
 }
