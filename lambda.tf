@@ -46,7 +46,7 @@ resource "aws_cloudwatch_event_target" "lambda" {
 # The Cloudwatch log group for the Lambda function
 resource "aws_cloudwatch_log_group" "logs" {
   name = "/aws/lambda/${aws_lambda_function.lambda.function_name}"
-  retention_in_days = 90
+  retention_in_days = 30
 
   tags = "${var.tags}"
 }
