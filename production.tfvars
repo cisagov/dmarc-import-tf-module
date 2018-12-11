@@ -7,8 +7,7 @@ permanent_bucket_name = "dmarc-import-permanent"
 temporary_bucket_name = "dmarc-import-temporary"
 
 emails = [
-  "reports@dmarc.cyber.dhs.gov",
-  "reports@dmarc.cyber.secure-fed.org"
+  "reports@dmarc.cyber.dhs.gov"
 ]
 
 lambda_function_name = "dmarc-import"
