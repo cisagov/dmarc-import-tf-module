@@ -9,10 +9,27 @@ resource "aws_iam_access_key" "reporter_user_key" {
   user = "${aws_iam_user.reporter_user.name}"
 }
 
+# IAM policy document that only allows GETting from Elasticsearch.
+# This will be applied to the role we are creating.
+data "aws_iam_policy_document" "reporter_user_es_doc" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "es:ESHttpGet"
+    ]
+
+    resources = [
+      "${aws_elasticsearch_domain.es.arn}",
+      "${aws_elasticsearch_domain.es.arn}/*"
+    ]
+  }
+}
+
 # The IAM user policy for our user
 resource "aws_iam_user_policy" "reporter_user_policy" {
   user = "${aws_iam_user.reporter_user.name}"
-  policy = "${data.aws_iam_policy_document.es_doc.json}"
+  policy = "${data.aws_iam_policy_document.reporter_user_es_doc.json}"
 }
 
 # The AWS access key ID for the reporter user

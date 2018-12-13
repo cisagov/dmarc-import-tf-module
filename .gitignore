@@ -1,2 +1,3 @@
+.python-version
 .terraform
 terraform.tfstate*
