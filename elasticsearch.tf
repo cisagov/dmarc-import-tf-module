@@ -60,9 +60,9 @@ resource "aws_elasticsearch_domain" "es" {
   tags = "${var.tags}"
 }
 
-# IAM policy document that that allows unauthenticated access to the
-# Elasticsearch domain from the CAL VPN.
-data "aws_iam_policy_document" "cal_vpn_es_doc" {
+# IAM policy document that allows the reporter user access to the
+# Elasticsearch domain from anywhere.
+data "aws_iam_policy_document" "reporter_es_doc" {
   statement {
     effect = "Allow"
     
@@ -81,7 +81,7 @@ data "aws_iam_policy_document" "cal_vpn_es_doc" {
     #   test = "IpAddress"
     #   variable = "aws:SourceIp"
     #   values = [
-    #     "X.Y.Z.T/32"
+    #     "X.Y.Z.W/32"
     #   ]
     # }
 
@@ -95,5 +95,5 @@ data "aws_iam_policy_document" "cal_vpn_es_doc" {
 resource "aws_elasticsearch_domain_policy" "cal_vpn" {
   domain_name = "${aws_elasticsearch_domain.es.domain_name}"
 
-  access_policies = "${data.aws_iam_policy_document.cal_vpn_es_doc.json}"
+  access_policies = "${data.aws_iam_policy_document.reporter_es_doc.json}"
 }
