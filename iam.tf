@@ -41,14 +41,16 @@ resource "aws_iam_role_policy" "s3_policy" {
   policy = "${data.aws_iam_policy_document.s3_doc.json}"
 }
 
-# IAM policy document that that allows POSTing to Elasticsearch.  This
-# will be applied to the role we are creating.
+# IAM policy document that allows HEADing, POSTing, and PUTting to
+# Elasticsearch.  This will be applied to the role we are creating.
 data "aws_iam_policy_document" "es_doc" {
   statement {
     effect = "Allow"
     
     actions = [
-      "es:ESHttpPost"
+      "es:ESHttpHead",
+      "es:ESHttpPost",
+      "es:ESHttpPut"
     ]
     
     resources = [
