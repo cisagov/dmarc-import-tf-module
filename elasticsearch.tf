@@ -62,38 +62,38 @@ resource "aws_elasticsearch_domain" "es" {
 
 # IAM policy document that allows the reporter user access to the
 # Elasticsearch domain from anywhere.
-data "aws_iam_policy_document" "reporter_es_doc" {
-  statement {
-    effect = "Allow"
+# data "aws_iam_policy_document" "reporter_es_doc" {
+#   statement {
+#     effect = "Allow"
     
-    actions = [
-      "es:ESHTTPGet"
-    ]
+#     actions = [
+#       "es:ESHTTPGet"
+#     ]
 
-    principals {
-      type = "AWS"
-      identifiers = [
-        "${aws_iam_user.reporter_user.arn}"
-      ]
-    }
+#     principals {
+#       type = "AWS"
+#       identifiers = [
+#         "${aws_iam_user.reporter_user.arn}"
+#       ]
+#     }
 
-    # condition {
-    #   test = "IpAddress"
-    #   variable = "aws:SourceIp"
-    #   values = [
-    #     "X.Y.Z.W/32"
-    #   ]
-    # }
+#     # condition {
+#     #   test = "IpAddress"
+#     #   variable = "aws:SourceIp"
+#     #   values = [
+#     #     "X.Y.Z.W/32"
+#     #   ]
+#     # }
 
-    resources = [
-      "${aws_elasticsearch_domain.es.arn}/*"
-    ]
-  }
-}
+#     resources = [
+#       "${aws_elasticsearch_domain.es.arn}/*"
+#     ]
+#   }
+# }
 
 # The access policy for the Elasticsearch domain
-resource "aws_elasticsearch_domain_policy" "cal_vpn" {
-  domain_name = "${aws_elasticsearch_domain.es.domain_name}"
+# resource "aws_elasticsearch_domain_policy" "cal_vpn" {
+#   domain_name = "${aws_elasticsearch_domain.es.domain_name}"
 
-  access_policies = "${data.aws_iam_policy_document.reporter_es_doc.json}"
-}
+#   access_policies = "${data.aws_iam_policy_document.reporter_es_doc.json}"
+# }
