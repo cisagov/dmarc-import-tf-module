@@ -6,7 +6,7 @@ data "aws_iam_policy_document" "assume_role_doc" {
     actions = ["sts:AssumeRole"]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
   }
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "assume_role_doc" {
 
 # The role we're creating
 resource "aws_iam_role" "role" {
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role_doc.json}"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_doc.json
 }
 
 # IAM policy document that that allows some S3 permissions on our
@@ -23,22 +23,22 @@ resource "aws_iam_role" "role" {
 data "aws_iam_policy_document" "s3_doc" {
   statement {
     effect = "Allow"
-    
+
     actions = [
       "s3:GetObject",
-      "s3:DeleteObject"
+      "s3:DeleteObject",
     ]
 
     resources = [
-      "${aws_s3_bucket.temporary.arn}/*"
+      "${aws_s3_bucket.temporary.arn}/*",
     ]
   }
 }
 
 # The S3 policy for our role
 resource "aws_iam_role_policy" "s3_policy" {
-  role = "${aws_iam_role.role.id}"
-  policy = "${data.aws_iam_policy_document.s3_doc.json}"
+  role   = aws_iam_role.role.id
+  policy = data.aws_iam_policy_document.s3_doc.json
 }
 
 # IAM policy document that allows HEADing, POSTing, and PUTting to
@@ -46,24 +46,24 @@ resource "aws_iam_role_policy" "s3_policy" {
 data "aws_iam_policy_document" "es_doc" {
   statement {
     effect = "Allow"
-    
+
     actions = [
       "es:ESHttpHead",
       "es:ESHttpPost",
-      "es:ESHttpPut"
+      "es:ESHttpPut",
     ]
-    
+
     resources = [
-      "${aws_elasticsearch_domain.es.arn}",
-      "${aws_elasticsearch_domain.es.arn}/*"
+      aws_elasticsearch_domain.es.arn,
+      "${aws_elasticsearch_domain.es.arn}/*",
     ]
   }
 }
 
 # The Elasticsearch policy for our role
 resource "aws_iam_role_policy" "es_policy" {
-  role = "${aws_iam_role.role.id}"
-  policy = "${data.aws_iam_policy_document.es_doc.json}"
+  role   = aws_iam_role.role.id
+  policy = data.aws_iam_policy_document.es_doc.json
 }
 
 # IAM policy document that that allows some SQS permissions on our
@@ -72,22 +72,22 @@ resource "aws_iam_role_policy" "es_policy" {
 data "aws_iam_policy_document" "sqs_doc" {
   statement {
     effect = "Allow"
-    
+
     actions = [
       "sqs:ReceiveMessage",
       "sqs:DeleteMessage",
     ]
 
     resources = [
-      "${aws_sqs_queue.queue.arn}"
+      aws_sqs_queue.queue.arn,
     ]
   }
 }
 
 # The SQS policy for our role
 resource "aws_iam_role_policy" "sqs_policy" {
-  role = "${aws_iam_role.role.id}"
-  policy = "${data.aws_iam_policy_document.sqs_doc.json}"
+  role   = aws_iam_role.role.id
+  policy = data.aws_iam_policy_document.sqs_doc.json
 }
 
 # IAM policy document that that allows some Cloudwatch permissions for
@@ -97,23 +97,23 @@ resource "aws_iam_role_policy" "sqs_policy" {
 data "aws_iam_policy_document" "cloudwatch_doc" {
   statement {
     effect = "Allow"
-    
+
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
-      "logs:PutLogEvents"
+      "logs:PutLogEvents",
     ]
 
     resources = [
-      "${aws_cloudwatch_log_group.logs.arn}",
+      aws_cloudwatch_log_group.logs.arn,
     ]
   }
 }
 
 # The CloudWatch policy for our role
 resource "aws_iam_role_policy" "cloudwatch_policy" {
-  role = "${aws_iam_role.role.id}"
-  policy = "${data.aws_iam_policy_document.cloudwatch_doc.json}"
+  role   = aws_iam_role.role.id
+  policy = data.aws_iam_policy_document.cloudwatch_doc.json
 }
 
 # IAM policy document that that allows the Lambda function to invoke
@@ -121,19 +121,20 @@ resource "aws_iam_role_policy" "cloudwatch_policy" {
 data "aws_iam_policy_document" "lambda_doc" {
   statement {
     effect = "Allow"
-    
+
     actions = [
-      "lambda:InvokeFunction"
+      "lambda:InvokeFunction",
     ]
 
     resources = [
-      "${aws_lambda_function.lambda.arn}"
+      aws_lambda_function.lambda.arn,
     ]
   }
 }
 
 # The Lambda policy for our role
 resource "aws_iam_role_policy" "lambda_policy" {
-  role = "${aws_iam_role.role.id}"
-  policy = "${data.aws_iam_policy_document.lambda_doc.json}"
+  role   = aws_iam_role.role.id
+  policy = data.aws_iam_policy_document.lambda_doc.json
 }
+
