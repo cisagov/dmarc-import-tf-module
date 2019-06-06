@@ -1,7 +1,7 @@
 # This is the S3 bucket where the DMARC aggregate report emails are
 # stored *permanently*
 resource "aws_s3_bucket" "permanent" {
-  bucket = "${var.permanent_bucket_name}"
+  bucket = var.permanent_bucket_name
 
   server_side_encryption_configuration {
     rule {
@@ -11,14 +11,14 @@ resource "aws_s3_bucket" "permanent" {
     }
   }
 
-  tags = "${var.tags}"
+  tags = var.tags
 }
 
 # This is the S3 bucket where the DMARC aggregate report emails are
 # stored "temporarily" until they have been processed
 resource "aws_s3_bucket" "temporary" {
-  bucket = "${var.temporary_bucket_name}"
-  
+  bucket = var.temporary_bucket_name
+
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -27,7 +27,7 @@ resource "aws_s3_bucket" "temporary" {
     }
   }
 
-  tags = "${var.tags}"
+  tags = var.tags
 }
 
 # IAM policy document that that allows SES to write to our permanent
@@ -37,23 +37,23 @@ data "aws_iam_policy_document" "ses_permanent_s3_doc" {
     effect = "Allow"
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["ses.amazonaws.com"]
     }
-    
+
     actions = [
-      "s3:PutObject"
+      "s3:PutObject",
     ]
 
     resources = [
-      "${aws_s3_bucket.permanent.arn}/*"
+      "${aws_s3_bucket.permanent.arn}/*",
     ]
 
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "aws:Referer"
       values = [
-        "${data.aws_caller_identity.current.account_id}"
+        data.aws_caller_identity.current.account_id,
       ]
     }
   }
@@ -61,8 +61,8 @@ data "aws_iam_policy_document" "ses_permanent_s3_doc" {
 
 # This is the policy for our permanent S3 bucket
 resource "aws_s3_bucket_policy" "permanent_policy" {
-  bucket = "${aws_s3_bucket.permanent.id}"
-  policy = "${data.aws_iam_policy_document.ses_permanent_s3_doc.json}"
+  bucket = aws_s3_bucket.permanent.id
+  policy = data.aws_iam_policy_document.ses_permanent_s3_doc.json
 }
 
 # IAM policy document that that allows SES to write to our
@@ -72,23 +72,23 @@ data "aws_iam_policy_document" "ses_temporary_s3_doc" {
     effect = "Allow"
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["ses.amazonaws.com"]
     }
-    
+
     actions = [
-      "s3:PutObject"
+      "s3:PutObject",
     ]
 
     resources = [
-      "${aws_s3_bucket.temporary.arn}/*"
+      "${aws_s3_bucket.temporary.arn}/*",
     ]
 
     condition {
-      test = "StringEquals"
+      test     = "StringEquals"
       variable = "aws:Referer"
       values = [
-        "${data.aws_caller_identity.current.account_id}"
+        data.aws_caller_identity.current.account_id,
       ]
     }
   }
@@ -96,17 +96,18 @@ data "aws_iam_policy_document" "ses_temporary_s3_doc" {
 
 # This is the policy for our temporary S3 bucket
 resource "aws_s3_bucket_policy" "temporary_policy" {
-  bucket = "${aws_s3_bucket.temporary.id}"
-  policy = "${data.aws_iam_policy_document.ses_temporary_s3_doc.json}"
+  bucket = aws_s3_bucket.temporary.id
+  policy = data.aws_iam_policy_document.ses_temporary_s3_doc.json
 }
 
 # S3 bucket notification that sends an event to the SQS queue when an
 # object is created in the temporary bucket
 resource "aws_s3_bucket_notification" "notification" {
-  bucket = "${aws_s3_bucket.temporary.id}"
+  bucket = aws_s3_bucket.temporary.id
 
   queue {
-    queue_arn = "${aws_sqs_queue.queue.arn}"
-    events = ["s3:ObjectCreated:*"]
+    queue_arn = aws_sqs_queue.queue.arn
+    events    = ["s3:ObjectCreated:*"]
   }
 }
+
