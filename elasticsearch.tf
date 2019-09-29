@@ -52,6 +52,14 @@ resource "aws_elasticsearch_domain" "es" {
     enabled = true
   }
 
+  cognito_options {
+    enabled = true
+    # This stuff was set up manually
+    identity_pool_id = "us-east-1:33b8b144-e2e5-43c7-853d-0f3760068edc"
+    role_arn         = "arn:aws:iam::344440683180:role/service-role/CognitoAccessForAmazonES"
+    user_pool_id     = "us-east-1_dXlTwH4Y7"
+  }
+
   log_publishing_options {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_logs.arn
     log_type                 = "ES_APPLICATION_LOGS"
