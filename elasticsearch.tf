@@ -1,6 +1,6 @@
 # The CloudWatch log group where application logs will be written
 resource "aws_cloudwatch_log_group" "es_logs" {
-  name              = "/aws/aes/domains/${var.elasticsearch_domain_name}"
+  name              = "/aws/aes/domains/${var.elasticsearch_domain_name}/application-logs"
   retention_in_days = 30
 
   tags = var.tags
