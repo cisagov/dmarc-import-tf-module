@@ -54,10 +54,11 @@ resource "aws_elasticsearch_domain" "es" {
 
   cognito_options {
     enabled = true
-    # This stuff was set up manually
-    identity_pool_id = "us-east-1:33b8b144-e2e5-43c7-853d-0f3760068edc"
-    role_arn         = "arn:aws:iam::344440683180:role/service-role/CognitoAccessForAmazonES"
-    user_pool_id     = "us-east-1_dXlTwH4Y7"
+    # This stuff was set up manually.  See
+    # https://github.com/cisagov/dmarc-import-terraform/issues/10.
+    identity_pool_id = var.cognito_identity_pool_id
+    role_arn         = var.cognito_role_arn
+    user_pool_id     = var.cognito_user_pool_id
   }
 
   log_publishing_options {

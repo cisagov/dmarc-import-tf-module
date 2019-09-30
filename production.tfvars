@@ -20,6 +20,12 @@ elasticsearch_type = "report"
 
 elasticsearch_domain_name = "dmarc-import-elasticsearch"
 
+cognito_identity_pool_id = "us-east-1:33b8b144-e2e5-43c7-853d-0f3760068edc"
+
+cognito_user_pool_id = "us-east-1_dXlTwH4Y7"
+
+cognito_role_arn = "arn:aws:iam::344440683180:role/service-role/CognitoAccessForAmazonES"
+
 tags = {
   Team = "NCATS OIS - Development"
   Application = "dmarc-import"
