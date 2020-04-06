@@ -51,4 +51,3 @@ resource "aws_cloudwatch_log_group" "logs" {
 
   tags = var.tags
 }
-

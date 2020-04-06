@@ -7,4 +7,3 @@ terraform {
     key            = "dmarc-import/terraform.tfstate"
   }
 }
-

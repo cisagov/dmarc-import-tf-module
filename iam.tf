@@ -137,4 +137,3 @@ resource "aws_iam_role_policy" "lambda_policy" {
   role   = aws_iam_role.role.id
   policy = data.aws_iam_policy_document.lambda_doc.json
 }
-

@@ -82,4 +82,3 @@ resource "aws_ses_receipt_rule" "rule" {
 resource "aws_ses_active_receipt_rule_set" "active" {
   rule_set_name = local.rule_set_name
 }
-
