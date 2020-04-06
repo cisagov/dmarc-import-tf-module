@@ -68,4 +68,3 @@ variable "tags" {
   default     = {}
   description = "Tags to apply to all AWS resources created"
 }
-
