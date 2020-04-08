@@ -3,7 +3,7 @@
 [![GitHub Build Status](https://github.com/cisagov/dmarc-import-tf-module/workflows/build/badge.svg)](https://github.com/cisagov/dmarc-import-tf-module/actions)
 
 `dmarc-import-terraform` contains the Terraform configuration files to
-build the AWS infrastrusture used for parsing DMARC aggregate reports.
+build the AWS infrastructure used for parsing DMARC aggregate reports.
 This repository goes along with
 [`dmarc-import`](https://github.com/cisagov/dmarc-import), which
 contains the actual source code for ingesting, parsing, and saving the
