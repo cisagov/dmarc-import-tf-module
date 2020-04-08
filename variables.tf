@@ -59,6 +59,11 @@ variable "queue_name" {
   description = "The name of the SQS queue where events will be sent as DMARC aggregate reports are received."
 }
 
+variable "rule_set_name" {
+  type        = string
+  description = "The name of the SES rule set that processes DMARC aggregate reports."
+}
+
 variable "temporary_bucket_name" {
   type        = string
   description = "The name of the S3 bucket where the DMARC aggregate report emails are stored temporarily (until processed)."
@@ -74,12 +79,6 @@ variable "aws_region" {
   type        = string
   description = "The AWS region to deploy into (e.g. us-east-1)."
   default     = "us-east-1"
-}
-
-variable "rule_set_name" {
-  type        = string
-  description = "The name of the SES rule set that processes DMARC aggregate reports."
-  default     = "dmarc-import-rules"
 }
 
 variable "tags" {
