@@ -16,42 +16,58 @@ infrastructure created by these Terraform files:
 ## Usage ##
 
 ```hcl
-module "example" {
-  source = "github.com/cisagov/skeleton-tf-module"
+module "dmarc_import" {
+  source = "github.com/cisagov/dmarc-import-tf-module"
 
-  aws_region            = "us-west-1"
-  aws_availability_zone = "b"
-  subnet_id             = "subnet-0123456789abcdef0"
-
-  tags = {
-    Key1 = "Value1"
-    Key2 = "Value2"
+  providers = {
+    aws = aws.dnsprovisionaccount
   }
+
+  aws_region                = var.aws_region
+  elasticsearch_domain_name = var.elasticsearch_domain_name
+  elasticsearch_index       = var.elasticsearch_index
+  elasticsearch_type        = var.elasticsearch_type
+  emails                    = var.emails
+  lambda_function_name      = var.lambda_function_name
+  lambda_function_zip_file  = var.lambda_function_zip_file
+  permanent_bucket_name     = var.permanent_bucket_name
+  queue_name                = var.queue_name
+  rule_set_name             = var.rule_set_name
+  tags                      = var.tags
+  temporary_bucket_name     = var.temporary_bucket_name
 }
 ```
 
 ## Examples ##
 
-* [Deploying into the default VPC](https://github.com/cisagov/skeleton-tf-module/tree/develop/examples/default_vpc)
+No examples.
+
+## Providers ##
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
 
 ## Inputs ##
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-------:|:--------:|
-| aws_region | The AWS region to deploy into (e.g. us-east-1) | string | | yes |
-| aws_availability_zone | The AWS availability zone to deploy into (e.g. a, b, c, etc.) | string | | yes |
-| subnet_id | The ID of the AWS subnet to deploy into (e.g. subnet-0123456789abcdef0) | string | | yes |
-| tags | Tags to apply to all AWS resources created | map(string) | `{}` | no |
+|------|-------------|------|---------|:-----:|
+| aws_region | The AWS region to deploy into (e.g. us-east-1). | `string` | `us-east-1` | no |
+| elasticsearch_domain_name | The domain name of the Elasticsearch instance. | `string` | n/a | yes |
+| elasticsearch_index | The Elasticsearch index to which to write DMARC aggregate report data. | `string` | n/a | yes |
+| elasticsearch_type | The Elasticsearch type corresponding to a DMARC aggregate report. | `string` | n/a | yes |
+| emails | A list of the email addresses at which DMARC aggregate reports are being received. | `list(string)` | n/a | yes |
+| lambda_function_name | The name to use for the Lambda function. | `string` | n/a | yes |
+| lambda_function_zip_file | The location of the zip file for the Lambda function. | `string` | n/a | yes |
+| permanent_bucket_name | The name of the S3 bucket where the DMARC aggregate report emails are stored permanently. | `string` | n/a | yes |
+| queue_name | The name of the SQS queue where events will be sent as DMARC aggregate reports are received. | `string` | n/a | yes |
+| rule_set_name | The name of the SES rule set that processes DMARC aggregate reports. | `string` | n/a | yes |
+| tags | Tags to apply to all AWS resources created. | `map(string)` | `{}` | no |
+| temporary_bucket_name | The name of the S3 bucket where the DMARC aggregate report emails are stored temporarily (until processed). | `string` | n/a | yes |
 
 ## Outputs ##
 
-| Name | Description |
-|------|-------------|
-| id | The EC2 instance ID |
-| arn | The EC2 instance ARN |
-| availability_zone | The AZ where the EC2 instance is deployed |
-| private_ip | The private IP of the EC2 instance |
-| subnet_id | The ID of the subnet where the EC2 instance is deployed |
+No output.
 
 ## Contributing ##
 
