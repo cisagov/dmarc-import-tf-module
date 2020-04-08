@@ -8,7 +8,7 @@ resource "aws_ses_receipt_rule_set" "rules" {
 # arrive
 resource "aws_ses_receipt_rule" "rule" {
   name          = "receive-dmarc-emails"
-  rule_set_name = var.rule_set_name
+  rule_set_name = aws_ses_receipt_rule_set.rules.rule_set_name
   recipients    = var.emails
 
   enabled      = true
@@ -29,5 +29,5 @@ resource "aws_ses_receipt_rule" "rule" {
 
 # Make this rule set the active one
 resource "aws_ses_active_receipt_rule_set" "active" {
-  rule_set_name = var.rule_set_name
+  rule_set_name = aws_ses_receipt_rule_set.rules.rule_set_name
 }
