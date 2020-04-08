@@ -1,5 +1,5 @@
 # IAM assume role policy document for the role we're creating
-data "aws_iam_policy_document" "assume_role_doc" {
+data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
 
@@ -13,14 +13,14 @@ data "aws_iam_policy_document" "assume_role_doc" {
 }
 
 # The role we're creating
-resource "aws_iam_role" "role" {
-  assume_role_policy = data.aws_iam_policy_document.assume_role_doc.json
+resource "aws_iam_role" "lambda" {
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 # IAM policy document that that allows some S3 permissions on our
 # temporary dmarc-import bucket.  This will be applied to the role we
 # are creating.
-data "aws_iam_policy_document" "s3_doc" {
+data "aws_iam_policy_document" "s3_lambda" {
   statement {
     effect = "Allow"
 
@@ -36,14 +36,14 @@ data "aws_iam_policy_document" "s3_doc" {
 }
 
 # The S3 policy for our role
-resource "aws_iam_role_policy" "s3_policy" {
-  role   = aws_iam_role.role.id
-  policy = data.aws_iam_policy_document.s3_doc.json
+resource "aws_iam_role_policy" "s3_lambda" {
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.s3_lambda.json
 }
 
 # IAM policy document that allows HEADing, POSTing, and PUTting to
 # Elasticsearch.  This will be applied to the role we are creating.
-data "aws_iam_policy_document" "es_doc" {
+data "aws_iam_policy_document" "es_lambda" {
   statement {
     effect = "Allow"
 
@@ -62,14 +62,14 @@ data "aws_iam_policy_document" "es_doc" {
 
 # The Elasticsearch policy for our role
 resource "aws_iam_role_policy" "es_policy" {
-  role   = aws_iam_role.role.id
-  policy = data.aws_iam_policy_document.es_doc.json
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.es_lambda.json
 }
 
 # IAM policy document that that allows some SQS permissions on our
 # dmarc-import queue.  This will be applied to the role we are
 # creating.
-data "aws_iam_policy_document" "sqs_doc" {
+data "aws_iam_policy_document" "sqs_lambda" {
   statement {
     effect = "Allow"
 
@@ -79,22 +79,22 @@ data "aws_iam_policy_document" "sqs_doc" {
     ]
 
     resources = [
-      aws_sqs_queue.queue.arn,
+      aws_sqs_queue.dmarc_reports.arn,
     ]
   }
 }
 
 # The SQS policy for our role
 resource "aws_iam_role_policy" "sqs_policy" {
-  role   = aws_iam_role.role.id
-  policy = data.aws_iam_policy_document.sqs_doc.json
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.sqs_lambda.json
 }
 
 # IAM policy document that that allows some Cloudwatch permissions for
 # our Lambda function.  This will allow the Lambda function to
 # generate log output in Cloudwatch.  This will be applied to the role
 # we are creating.
-data "aws_iam_policy_document" "cloudwatch_doc" {
+data "aws_iam_policy_document" "cloudwatch_lambda" {
   statement {
     effect = "Allow"
 
@@ -112,13 +112,13 @@ data "aws_iam_policy_document" "cloudwatch_doc" {
 
 # The CloudWatch policy for our role
 resource "aws_iam_role_policy" "cloudwatch_policy" {
-  role   = aws_iam_role.role.id
-  policy = data.aws_iam_policy_document.cloudwatch_doc.json
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.cloudwatch_lambda.json
 }
 
 # IAM policy document that that allows the Lambda function to invoke
 # itself.  This will be applied to the role we are creating.
-data "aws_iam_policy_document" "lambda_doc" {
+data "aws_iam_policy_document" "lambda_lambda" {
   statement {
     effect = "Allow"
 
@@ -133,7 +133,7 @@ data "aws_iam_policy_document" "lambda_doc" {
 }
 
 # The Lambda policy for our role
-resource "aws_iam_role_policy" "lambda_policy" {
-  role   = aws_iam_role.role.id
-  policy = data.aws_iam_policy_document.lambda_doc.json
+resource "aws_iam_role_policy" "lambda_lambda" {
+  role   = aws_iam_role.lambda.id
+  policy = data.aws_iam_policy_document.lambda_lambda.json
 }
