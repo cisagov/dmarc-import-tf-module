@@ -106,7 +106,7 @@ resource "aws_s3_bucket_notification" "notification" {
   bucket = aws_s3_bucket.temporary.id
 
   queue {
-    queue_arn = aws_sqs_queue.queue.arn
+    queue_arn = aws_sqs_queue.dmarc_reports.arn
     events    = ["s3:ObjectCreated:*"]
   }
 }
