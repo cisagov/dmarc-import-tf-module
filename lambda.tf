@@ -3,7 +3,7 @@ resource "aws_lambda_function" "lambda" {
   filename         = var.lambda_function_zip_file
   source_code_hash = filebase64sha256(var.lambda_function_zip_file)
   function_name    = var.lambda_function_name
-  role             = aws_iam_role.role.arn
+  role             = aws_iam_role.lambda.arn
   handler          = "lambda_handler.handler"
   runtime          = "python3.6"
   timeout          = 300
@@ -12,7 +12,7 @@ resource "aws_lambda_function" "lambda" {
 
   environment {
     variables = {
-      queue_url            = aws_sqs_queue.queue.id
+      queue_url            = aws_sqs_queue.dmarc_reports.id
       elasticsearch_url    = "https://${aws_elasticsearch_domain.es.endpoint}"
       elasticsearch_index  = var.elasticsearch_index
       elasticsearch_region = var.aws_region
@@ -51,4 +51,3 @@ resource "aws_cloudwatch_log_group" "logs" {
 
   tags = var.tags
 }
-
