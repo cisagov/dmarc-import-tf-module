@@ -67,7 +67,9 @@ No examples.
 
 ## Outputs ##
 
-No output.
+| Name | Description |
+|------|-------------|
+| elasticsearch_domain | The Elasticsearch domain. |
 
 ## Notes ##
 
