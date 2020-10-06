@@ -42,16 +42,23 @@ module "dmarc_import" {
 
 No examples.
 
+## Requirements ##
+
+| Name | Version |
+|------|---------|
+| terraform | ~> 0.12.0 |
+| aws | ~> 2.0 |
+
 ## Providers ##
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | ~> 2.0 |
 
 ## Inputs ##
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | aws_region | The AWS region to deploy into (e.g. us-east-1). | `string` | `us-east-1` | no |
 | elasticsearch_domain_name | The domain name of the Elasticsearch instance. | `string` | n/a | yes |
 | elasticsearch_index | The Elasticsearch index to which to write DMARC aggregate report data. | `string` | n/a | yes |
