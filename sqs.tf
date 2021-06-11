@@ -6,16 +6,12 @@ resource "aws_sqs_queue" "dmarc_reports" {
   receive_wait_time_seconds = 20
 
   redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.dead_letter.arn}\",\"maxReceiveCount\":4}"
-
-  tags = var.tags
 }
 
 # This is the dead-letter queue for the previous SQS queue
 resource "aws_sqs_queue" "dead_letter" {
   name                      = "${var.queue_name}_dead_letter"
   message_retention_seconds = 1209600
-
-  tags = var.tags
 }
 
 # IAM policy document that that allows S3 to write to the queue

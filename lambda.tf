@@ -18,8 +18,6 @@ resource "aws_lambda_function" "lambda" {
       elasticsearch_region = var.aws_region
     }
   }
-
-  tags = var.tags
 }
 
 # Allows CloudWatch to invoke this Lambda function
@@ -48,6 +46,4 @@ resource "aws_cloudwatch_event_target" "lambda" {
 resource "aws_cloudwatch_log_group" "logs" {
   name              = "/aws/lambda/${aws_lambda_function.lambda.function_name}"
   retention_in_days = 30
-
-  tags = var.tags
 }

@@ -10,8 +10,6 @@ resource "aws_s3_bucket" "permanent" {
       }
     }
   }
-
-  tags = var.tags
 }
 
 # This is the S3 bucket where the DMARC aggregate report emails are
@@ -26,8 +24,6 @@ resource "aws_s3_bucket" "temporary" {
       }
     }
   }
-
-  tags = var.tags
 }
 
 # IAM policy document that that allows SES to write to our permanent
