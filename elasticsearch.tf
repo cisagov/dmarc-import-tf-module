@@ -2,7 +2,6 @@
 resource "aws_cloudwatch_log_group" "es_logs" {
   name              = "/aws/aes/domains/${var.elasticsearch_domain_name}/application-logs"
   retention_in_days = 30
-  tags              = var.tags
 }
 
 # IAM policy document that that allows ES to write to CloudWatch logs
@@ -35,7 +34,6 @@ resource "aws_cloudwatch_log_resource_policy" "es_cloudwatch_policy" {
 resource "aws_elasticsearch_domain" "es" {
   domain_name           = var.elasticsearch_domain_name
   elasticsearch_version = "6.2"
-  tags                  = var.tags
 
   cluster_config {
     instance_type  = "m4.large.elasticsearch"
