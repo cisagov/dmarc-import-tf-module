@@ -106,6 +106,7 @@ data "aws_iam_policy_document" "cloudwatch_lambda" {
 
     resources = [
       aws_cloudwatch_log_group.logs.arn,
+      "${aws_cloudwatch_log_group.logs.arn}:*",
     ]
   }
 }
