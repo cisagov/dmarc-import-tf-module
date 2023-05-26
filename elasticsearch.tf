@@ -33,10 +33,10 @@ resource "aws_cloudwatch_log_resource_policy" "es_cloudwatch_policy" {
 # The Elasticsearch domain
 resource "aws_elasticsearch_domain" "es" {
   domain_name           = var.elasticsearch_domain_name
-  elasticsearch_version = "6.2"
+  elasticsearch_version = "OpenSearch_1.3"
 
   cluster_config {
-    instance_type  = "m4.large.elasticsearch"
+    instance_type  = "m6g.large.elasticsearch"
     instance_count = 3
     zone_awareness_config {
       availability_zone_count = 3
@@ -46,7 +46,7 @@ resource "aws_elasticsearch_domain" "es" {
 
   ebs_options {
     ebs_enabled = true
-    volume_type = "standard"
+    volume_type = "gp2"
     volume_size = 100
   }
 
