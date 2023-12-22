@@ -4,21 +4,6 @@
 # You must provide a value for each of these parameters.
 # ------------------------------------------------------------------------------
 
-# variable "cognito_identity_pool_id" {
-#   type        = string
-#   description = "The ID of the Cognito identity pool to use for Kibana access."
-# }
-
-# variable "cognito_role_arn" {
-#   type        = string
-#   description = "The ARN of the role that grants Cognito access for Elasticsearch.  If you are using the AWS-provided role for this purpose, then the ARN will look like arn:aws:iam::<account-id>:role/service-role/CognitoAccessForAmazonES."
-# }
-
-# variable "cognito_user_pool_id" {
-#   type        = string
-#   description = "The ID of the Cognito user pool to use for Kibana access."
-# }
-
 variable "elasticsearch_domain_name" {
   type        = string
   description = "The domain name of the Elasticsearch instance."

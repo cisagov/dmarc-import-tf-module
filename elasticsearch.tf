@@ -55,15 +55,6 @@ resource "aws_elasticsearch_domain" "es" {
     enabled = true
   }
 
-  # cognito_options {
-  #   enabled = true
-  #   # This stuff was set up manually.  See
-  #   # https://github.com/cisagov/dmarc-import-terraform/issues/10.
-  #   identity_pool_id = var.cognito_identity_pool_id
-  #   role_arn         = var.cognito_role_arn
-  #   user_pool_id     = var.cognito_user_pool_id
-  # }
-
   log_publishing_options {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_logs.arn
     log_type                 = "ES_APPLICATION_LOGS"
