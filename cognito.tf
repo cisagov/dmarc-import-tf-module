@@ -1,5 +1,16 @@
 # Cognito resources used by the Elasticsearch domain
 
+# Cognito users
+resource "aws_cognito_user" "dmarc" {
+  for_each = { for k, v in var.cognito_usernames : k => v }
+
+  user_pool_id = aws_cognito_user_pool.dmarc.id
+  username     = each.key
+  attributes = {
+    email = each.value["email"]
+  }
+}
+
 # The Cognito user pool
 resource "aws_cognito_user_pool" "dmarc" {
   account_recovery_setting {
