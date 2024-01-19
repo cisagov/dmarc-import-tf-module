@@ -60,13 +60,6 @@ resource "aws_elasticsearch_domain" "es" {
   domain_name           = var.elasticsearch_domain_name
   elasticsearch_version = "OpenSearch_1.3"
 
-  cognito_options {
-    enabled          = true
-    identity_pool_id = aws_cognito_identity_pool.dmarc.id
-    role_arn         = aws_iam_role.opensearch_cognito.arn
-    user_pool_id     = aws_cognito_user_pool.dmarc.id
-  }
-
   cluster_config {
     instance_type  = "m6g.large.elasticsearch"
     instance_count = 3
@@ -74,6 +67,13 @@ resource "aws_elasticsearch_domain" "es" {
       availability_zone_count = 3
     }
     zone_awareness_enabled = true
+  }
+
+  cognito_options {
+    enabled          = true
+    identity_pool_id = aws_cognito_identity_pool.dmarc.id
+    role_arn         = aws_iam_role.opensearch_cognito.arn
+    user_pool_id     = aws_cognito_user_pool.dmarc.id
   }
 
   ebs_options {
