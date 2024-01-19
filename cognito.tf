@@ -49,6 +49,10 @@ resource "aws_cognito_managed_user_pool_client" "dmarc" {
   name_prefix  = "AmazonOpenSearchService-${var.cognito_user_pool_name}"
   user_pool_id = aws_cognito_user_pool.dmarc.id
 
+  # Since our Cognito user pool client is automatically created by Elasticsearch
+  # (OpenSearch), we add a manual dependency here to ensure that the
+  # Elasticsearch (OpenSearch) domain (and the user pool client) is created
+  # before we create this aws_cognito_managed_user_pool_client resource.
   depends_on = [
     aws_elasticsearch_domain.es,
   ]
