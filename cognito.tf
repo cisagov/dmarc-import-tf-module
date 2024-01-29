@@ -128,8 +128,8 @@ data "aws_iam_policy_document" "cognito_authenticated_role_policy" {
 
 resource "aws_iam_role_policy" "cognito_authenticated" {
   name   = "${var.cognito_authenticated_role_name}_policy"
-  role   = aws_iam_role.cognito_authenticated.id
   policy = data.aws_iam_policy_document.cognito_authenticated_role_policy.json
+  role   = aws_iam_role.cognito_authenticated.id
 }
 
 # Attach the Cognito authenticated role to the Cognito identity pool
@@ -137,8 +137,8 @@ resource "aws_cognito_identity_pool_roles_attachment" "dmarc" {
   identity_pool_id = aws_cognito_identity_pool.dmarc.id
 
   role_mapping {
-    identity_provider         = "cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.dmarc.id}:${aws_cognito_managed_user_pool_client.dmarc.id}"
     ambiguous_role_resolution = "AuthenticatedRole"
+    identity_provider         = "cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.dmarc.id}:${aws_cognito_managed_user_pool_client.dmarc.id}"
     type                      = "Rules"
 
     mapping_rule {
