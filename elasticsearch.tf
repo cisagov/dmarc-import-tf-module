@@ -31,8 +31,32 @@ resource "aws_cloudwatch_log_resource_policy" "es_cloudwatch_policy" {
   policy_name     = "dmarc-import-es-cloudwatch-policy"
 }
 
+# Policy document that allows authenticated Cognito users access to the
+# Elasticsearch domain
+data "aws_iam_policy_document" "es_cognito_auth" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "es:*",
+    ]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        aws_iam_role.cognito_authenticated.arn,
+      ]
+    }
+
+    resources = [
+      "arn:aws:es:${var.aws_region}:*:domain/${var.elasticsearch_domain_name}/*",
+    ]
+  }
+}
+
 # The Elasticsearch domain
 resource "aws_elasticsearch_domain" "es" {
+  access_policies       = data.aws_iam_policy_document.es_cognito_auth.json
   domain_name           = var.elasticsearch_domain_name
   elasticsearch_version = "OpenSearch_1.3"
 
@@ -45,6 +69,13 @@ resource "aws_elasticsearch_domain" "es" {
     zone_awareness_enabled = true
   }
 
+  cognito_options {
+    enabled          = true
+    identity_pool_id = aws_cognito_identity_pool.dmarc.id
+    role_arn         = aws_iam_role.opensearch_cognito.arn
+    user_pool_id     = aws_cognito_user_pool.dmarc.id
+  }
+
   ebs_options {
     ebs_enabled = true
     volume_type = "gp2"
@@ -54,15 +85,6 @@ resource "aws_elasticsearch_domain" "es" {
   encrypt_at_rest {
     enabled = true
   }
-
-  # cognito_options {
-  #   enabled = true
-  #   # This stuff was set up manually.  See
-  #   # https://github.com/cisagov/dmarc-import-terraform/issues/10.
-  #   identity_pool_id = var.cognito_identity_pool_id
-  #   role_arn         = var.cognito_role_arn
-  #   user_pool_id     = var.cognito_user_pool_id
-  # }
 
   log_publishing_options {
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_logs.arn
