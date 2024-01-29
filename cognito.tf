@@ -88,12 +88,12 @@ data "aws_iam_policy_document" "cognito_authenticated" {
   statement {
     effect = "Allow"
 
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+
     principals {
       type        = "Federated"
       identifiers = ["cognito-identity.amazonaws.com"]
     }
-
-    actions = ["sts:AssumeRoleWithWebIdentity"]
 
     condition {
       test     = "StringEquals"
@@ -159,9 +159,9 @@ resource "aws_cognito_identity_pool_roles_attachment" "dmarc" {
 # OpenSearch Dashboards/Kibana authentication
 data "aws_iam_policy_document" "opensearch_cognito_trust" {
   statement {
-    actions = ["sts:AssumeRole"]
-
     effect = "Allow"
+
+    actions = ["sts:AssumeRole"]
 
     principals {
       identifiers = ["es.amazonaws.com"]
