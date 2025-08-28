@@ -17,7 +17,7 @@ infrastructure created by these Terraform files:
 
 ```hcl
 module "dmarc_import" {
-  source = "github.com/cisagov/dmarc-import-tf-module"
+  source = "github.com/cisagov/dmarc-import-tf-module?ref=v1.2.0+build.1"
 
   providers = {
     aws = aws.dnsprovisionaccount
