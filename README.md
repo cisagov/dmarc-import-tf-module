@@ -1,6 +1,8 @@
 # dmarc-import-tf-module #
 
 [![GitHub Build Status](https://github.com/cisagov/dmarc-import-tf-module/workflows/build/badge.svg)](https://github.com/cisagov/dmarc-import-tf-module/actions)
+[![License](https://img.shields.io/github/license/cisagov/dmarc-import-tf-module)](https://spdx.org/licenses/)
+[![CodeQL](https://github.com/cisagov/dmarc-import-tf-module/workflows/CodeQL/badge.svg)](https://github.com/cisagov/dmarc-import-tf-module/actions/workflows/codeql-analysis.yml)
 
 `dmarc-import-tf-module` contains the Terraform configuration files to
 build the AWS infrastructure used for parsing DMARC aggregate reports.
